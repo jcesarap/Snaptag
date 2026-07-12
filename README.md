@@ -1,6 +1,7 @@
 # DEMO VIDEO
 
-![](fastlane/metadata/android/en-US/images/video_demo.mp4)
+https://github.com/user-attachments/assets/9ef48dd7-12fe-4c37-add7-4ba600b9aa5b
+
 
 # COMPILATION
 

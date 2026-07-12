@@ -1,6 +1,9 @@
 # DEMO VIDEO
 
+# COMPILATION
 
+* `./gradlew clean assembleDebug`
+* The APKs will be at `./app/build/outputs/apk/debug/`
 
 ## License
 

@@ -68,18 +68,19 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bottom_camera_button"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
+            android:layout_height="65dp"
             android:layout_gravity="bottom"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="90dp"
+            android:translationY="-12dp"
+            android:layout_marginBottom="12dp"
             app:backgroundTint="?attr/colorSecondaryContainer"
             app:icon="@drawable/camera_icon_white_24dp"
             app:iconSize="36dp"
             app:iconTint="?attr/colorOnSecondaryContainer"
             app:cornerRadius="24dp"
 
-            android:text=" "
+            android:text=""
             app:iconGravity="textStart" />
 
     </me.zhanghai.android.files.ui.CoordinatorScrollingFrameLayout>

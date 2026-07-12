@@ -67,21 +67,15 @@ class ThemedSpeedDialView : SpeedDialView {
         }
         val context = context
         if (context.isMaterial3Theme) {
-            mainFabClosedBackgroundColor =
-                context.getColorByAttr(com.google.android.material.R.attr.colorSecondaryContainer)
-            mainFabClosedIconColor =
-                context.getColorByAttr(com.google.android.material.R.attr.colorOnSecondaryContainer)
-            mainFabOpenedBackgroundColor =
-                context.getColorByAttr(androidx.appcompat.R.attr.colorPrimary)
-            mainFabOpenedIconColor =
-                context.getColorByAttr(com.google.android.material.R.attr.colorOnPrimary)
+            mainFabClosedBackgroundColor = android.graphics.Color.parseColor("#0F0F0F")
+            mainFabClosedIconColor = android.graphics.Color.parseColor("#FFFFFF")
+            mainFabOpenedBackgroundColor = android.graphics.Color.parseColor("#0F0F0F")
+            mainFabOpenedIconColor = android.graphics.Color.parseColor("#FFFFFF")
         } else {
-            mainFabClosedBackgroundColor =
-                context.getColorByAttr(com.google.android.material.R.attr.colorSecondary)
-            mainFabClosedIconColor =
-                context.getColorByAttr(com.google.android.material.R.attr.colorOnSecondary)
-            mainFabOpenedBackgroundColor = mainFabClosedBackgroundColor
-            mainFabOpenedIconColor = mainFabClosedIconColor
+            mainFabClosedBackgroundColor = android.graphics.Color.parseColor("#0F0F0F")
+            mainFabClosedIconColor = android.graphics.Color.parseColor("#FFFFFF")
+            mainFabOpenedBackgroundColor = android.graphics.Color.parseColor("#0F0F0F")
+            mainFabOpenedIconColor = android.graphics.Color.parseColor("#FFFFFF")
         }
         // Always use our own animation to fix the library issue that ripple is rotated as well.
         val mainFabDrawable = RotateDrawable::class.createCompat().apply {

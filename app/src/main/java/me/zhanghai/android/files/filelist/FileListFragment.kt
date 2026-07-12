@@ -1521,7 +1521,12 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
 
     override fun createDirectory(name: String) {
         val path = currentPath.resolve(name)
-        FileJobService.create(path, true, requireContext())
+        val context = requireContext()
+
+        FileJobService.create(path, true, context)
+
+        val nomediaPath = path.resolve(".nomedia")
+        FileJobService.create(nomediaPath, false, context)
     }
 
     override val currentPath: Path

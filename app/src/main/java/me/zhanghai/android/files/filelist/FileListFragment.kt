@@ -142,6 +142,17 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
     ShowRequestNotificationPermissionInSettingsRationaleDialogFragment.Listener,
     ShowRequestStoragePermissionRationaleDialogFragment.Listener,
     ShowRequestStoragePermissionInSettingsRationaleDialogFragment.Listener {
+    private val requestCameraPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(), this::onRequestCameraPermissionResult
+    )
+
+    private val captureImageLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            refresh() // Reload folder to display the brand-new picture asset
+        }
+    }
     private val requestAllFilesAccessLauncher = registerForActivityResult(
         RequestAllFilesAccessContract(), this::onRequestAllFilesAccessResult
     )
@@ -161,6 +172,66 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
         RequestPermissionInSettingsContract(android.Manifest.permission.POST_NOTIFICATIONS),
         this::onRequestNotificationPermissionInSettingsResult
     )
+
+    private var photoUri: Uri? = null
+
+    private fun onRequestCameraPermissionResult(isGranted: Boolean) {
+        if (isGranted) {
+            launchCameraIntent()
+        } else {
+            showToast("Camera permission is required to snap photos.")
+        }
+    }
+
+    private fun launchCameraIntent() {
+        val context = requireContext()
+        val currentFolder = currentPath
+
+        val folderName = currentFolder.fileName?.toString() ?: "Photo"
+
+        var maxNumber = -1
+        var baseFileExists = false
+
+        val regexBase = Regex("^${Regex.escape(folderName)}\\.(jpg|jpeg)$", RegexOption.IGNORE_CASE)
+        val regexIncrement = Regex("^${Regex.escape(folderName)} \\((\\d+)\\)\\.(jpg|jpeg)$", RegexOption.IGNORE_CASE)
+
+        for (index in 0..<adapter.itemCount) {
+            val fileItem = adapter.getItem(index)
+            val fileName = fileItem.name
+
+            if (regexBase.matches(fileName)) {
+                baseFileExists = true
+            } else {
+                val match = regexIncrement.matchEntire(fileName)
+                if (match != null) {
+                    val num = match.groupValues[1].toIntOrNull() ?: 0
+                    if (num > maxNumber) {
+                        maxNumber = num
+                    }
+                }
+            }
+        }
+
+        val finalFileName = when {
+            !baseFileExists -> "$folderName.jpg"
+            maxNumber == -1 -> "$folderName (1).jpg"
+            else -> "$folderName (${maxNumber + 1}).jpg"
+        }
+
+        val photoFile = currentFolder.resolve(finalFileName)
+        photoUri = photoFile.fileProviderUri
+
+        val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE).apply {
+            putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photoUri)
+            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        }
+
+        if (cameraIntent.resolveActivity(context.packageManager) != null) {
+            captureImageLauncher.launch(cameraIntent)
+        } else {
+            showToast("No camera app found on this device")
+        }
+    }
 
     private val args by args<Args>()
     private val argsPath by lazy { args.intent.extraPath }
@@ -258,6 +329,17 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
             //return false
             binding.speedDialView.close()
             true
+        }
+        binding.root.findViewById<View>(R.id.bottom_camera_button)?.setOnClickListener {
+            if (androidx.core.content.ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                launchCameraIntent()
+            } else {
+                requestCameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+            }
         }
 
         val viewLifecycleOwner = viewLifecycleOwner

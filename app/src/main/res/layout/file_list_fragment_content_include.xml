@@ -10,6 +10,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+
     <me.zhanghai.android.files.ui.CoordinatorScrollingFrameLayout
         android:id="@+id/contentLayout"
         android:layout_width="match_parent"
@@ -63,5 +64,23 @@
                 android:fitsSystemWindows="true"
                 tools:listitem="@layout/file_item_list" />
         </androidx.swiperefreshlayout.widget.ThemedSwipeRefreshLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bottom_camera_button"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:backgroundTint="?attr/colorSecondaryContainer"
+            app:icon="@drawable/camera_icon_white_24dp"
+            app:iconSize="36dp"
+            app:iconTint="?attr/colorOnSecondaryContainer"
+            app:cornerRadius="24dp"
+
+            android:text=" "
+            app:iconGravity="textStart" />
+
     </me.zhanghai.android.files.ui.CoordinatorScrollingFrameLayout>
 </merge>

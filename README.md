@@ -1,5 +1,7 @@
 # DEMO VIDEO
 
+![](fastlane/metadata/android/en-US/images/video_demo.mp4)
+
 # COMPILATION
 
 * `./gradlew clean assembleDebug`
